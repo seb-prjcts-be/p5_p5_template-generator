@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>p5.js Template Generator</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <!-- Add syntax highlighting for code preview -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>p5.js Template Generator</h1>
+            <p>Create custom p5.js projects with enhanced libraries and functionality</p>
+            <div class="main-actions">
+                <button id="generate-btn" class="btn primary">Generate & Download</button>
+                <button id="preview-live-btn" class="btn secondary">Live Preview</button>
+                <button id="open-template-btn" class="btn tertiary">Choose Template</button>
+            </div>
+        </header>
+
+        <main>
+            <div class="tabs-container main-tabs">
+                <div class="tabs">
+                    <button class="tab-btn active" data-main-tab="settings">Project Settings</button>
+                    <button class="tab-btn" data-main-tab="libraries">Libraries</button>
+                    <button class="tab-btn" data-main-tab="preview">Code Preview</button>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <!-- Settings Tab -->
+                <div class="main-tab-content active" id="settings-tab">
+                    <div class="settings-grid">
+                        <section class="project-settings">
+                            <h2>Project Settings</h2>
+                            <div class="form-group">
+                                <label for="project-name">Project Name</label>
+                                <input type="text" id="project-name" value="my-p5-project">
+                            </div>
+                            <div class="form-group">
+                                <label for="canvas-width">Canvas Width</label>
+                                <input type="number" id="canvas-width" value="900">
+                            </div>
+                            <div class="form-group">
+                                <label for="canvas-height">Canvas Height</label>
+                                <input type="number" id="canvas-height" value="900">
+                            </div>
+                            <div class="form-group">
+                                <label for="canvas-mode">Canvas Mode</label>
+                                <select id="canvas-mode">
+                                    <option value="p2d">P2D (Default)</option>
+                                    <option value="webgl">WEBGL</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="background-color">Background Color</label>
+                                <input type="color" id="background-color" value="#F5F5F5">
+                            </div>
+                        </section>
+
+                        <section class="custom-functions">
+                            <h2>Custom Functions</h2>
+                            <div id="function-list">
+                                <!-- Function entries will be added here dynamically -->
+                            </div>
+                            <button id="add-function" class="btn">Add Custom Function</button>
+                        </section>
+                    </div>
+                </div>
+
+                <!-- Libraries Tab -->
+                <div class="main-tab-content" id="libraries-tab">
+                    <div class="libraries-container">
+                        <section class="library-category">
+                            <h2>Core Libraries</h2>
+                            <div class="library-grid">
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5" checked> p5.js</label>
+                                        <div class="library-icon p5-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>The core p5.js library for creative coding</p>
+                                    </div>
+                                </div>
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-sound"> p5.sound.js</label>
+                                        <div class="library-icon sound-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Audio library with playback, analysis, and synthesis</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="library-category">
+                            <h2>Utility Libraries</h2>
+                            <div class="library-grid">
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-gui"> p5.gui</label>
+                                        <div class="library-icon gui-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Quick controller GUI for your sketches</p>
+                                    </div>
+                                </div>
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-scenemanager"> p5.SceneManager</label>
+                                        <div class="library-icon scenemanager-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Manage multiple scenes/screens in your sketch</p>
+                                    </div>
+                                </div>
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-play"> p5.play</label>
+                                        <div class="library-icon play-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Animation and gaming library for p5.js</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="library-category">
+                            <h2>Math & Physics</h2>
+                            <div class="library-grid">
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-matter"> matter.js</label>
+                                        <div class="library-icon matter-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>2D physics engine for the web</p>
+                                    </div>
+                                </div>
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-particle"> p5.particle</label>
+                                        <div class="library-icon particle-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Particle system library for p5.js</p>
+                                    </div>
+                                </div>
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-func"> p5.func</label>
+                                        <div class="library-icon func-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Mathematical function visualization</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="library-category">
+                            <h2>Media & Interaction</h2>
+                            <div class="library-grid">
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-speech"> p5.speech</label>
+                                        <div class="library-icon speech-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Speech synthesis and recognition</p>
+                                    </div>
+                                </div>
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-ml5"> ml5.js</label>
+                                        <div class="library-icon ml5-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Friendly machine learning for the web</p>
+                                    </div>
+                                </div>
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-accessibility"> p5.accessibility</label>
+                                        <div class="library-icon accessibility-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Makes p5 sketches more accessible</p>
+                                    </div>
+                                </div>
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-capture"> p5.capture</label>
+                                        <div class="library-icon capture-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Record and export animations from p5.js sketches</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="library-category">
+                            <h2>Data & Visualization</h2>
+                            <div class="library-grid">
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-chart"> p5.js-chart</label>
+                                        <div class="library-icon chart-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Create charts and graphs in p5.js</p>
+                                    </div>
+                                </div>
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-d3"> p5.js-d3</label>
+                                        <div class="library-icon d3-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Integration of D3.js with p5.js</p>
+                                    </div>
+                                </div>
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-mapbox"> p5.js-mapbox</label>
+                                        <div class="library-icon mapbox-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Mapbox integration for p5.js</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="library-category">
+                            <h2>3D & WebGL</h2>
+                            <div class="library-grid">
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-3d"> p5.3D</label>
+                                        <div class="library-icon p5-3d-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Enhanced 3D capabilities for p5.js</p>
+                                    </div>
+                                </div>
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-easycam"> p5.EasyCam</label>
+                                        <div class="library-icon easycam-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>3D camera control for p5.js</p>
+                                    </div>
+                                </div>
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-shader"> p5.js-shader</label>
+                                        <div class="library-icon shader-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Simplified shader usage in p5.js</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="library-category">
+                            <h2>Input & Interaction</h2>
+                            <div class="library-grid">
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-touchgui"> p5.touchgui</label>
+                                        <div class="library-icon touchgui-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Touch-friendly GUI elements for p5.js</p>
+                                    </div>
+                                </div>
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-serial"> p5.serialport</label>
+                                        <div class="library-icon serial-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Serial communication for p5.js</p>
+                                    </div>
+                                </div>
+                                <div class="library-card">
+                                    <div class="library-header">
+                                        <label><input type="checkbox" id="lib-p5-ble"> p5.ble.js</label>
+                                        <div class="library-icon ble-icon"></div>
+                                    </div>
+                                    <div class="library-description">
+                                        <p>Bluetooth Low Energy connectivity for p5.js</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <!-- Preview Tab -->
+                <div class="main-tab-content" id="preview-tab">
+                    <div class="preview-container">
+                        <div class="code-preview-container">
+                            <div class="tabs-container code-tabs">
+                                <div class="tabs">
+                                    <button class="tab-btn active" data-tab="html">index.html</button>
+                                    <button class="tab-btn" data-tab="js">sketch.js</button>
+                                    <button class="tab-btn" data-tab="css">style.css</button>
+                                </div>
+                                <div class="tab-content">
+                                    <pre><code id="preview-html" class="language-html code-preview active"></code></pre>
+                                    <pre><code id="preview-js" class="language-javascript code-preview"></code></pre>
+                                    <pre><code id="preview-css" class="language-css code-preview"></code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="live-preview-container">
+                            <h2>Live Preview</h2>
+                            <div id="live-preview-frame">
+                                <iframe id="preview-iframe" sandbox="allow-scripts"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal for adding custom functions -->
+        <div id="function-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Add Custom Function</h2>
+                <div class="form-group">
+                    <label for="function-name">Function Name</label>
+                    <input type="text" id="function-name" placeholder="myCustomFunction">
+                </div>
+                <div class="form-group">
+                    <label for="function-url">CDN URL</label>
+                    <input type="text" id="function-url" placeholder="https://cdn.example.com/myFunction.js">
+                </div>
+                <div class="form-group">
+                    <label for="function-code">Function Code</label>
+                    <textarea id="function-code" placeholder="function myCustomFunction() {
+  // Your code here
+}"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Source Type</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="source-type" value="cdn" checked> Use CDN URL</label>
+                        <label><input type="radio" name="source-type" value="inline"> Include Code Inline</label>
+                    </div>
+                </div>
+                <button id="save-function" class="btn primary">Add Function</button>
+            </div>
+        </div>
+        
+        <!-- Template library modal -->
+        <div id="template-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Choose a Template</h2>
+                <div class="template-grid">
+                    <div class="template-card" data-template="empty">
+                        <h3>Empty Project</h3>
+                        <p>Start with a blank canvas</p>
+                    </div>
+                    <div class="template-card" data-template="particles">
+                        <h3>Particle System</h3>
+                        <p>Interactive particle animation</p>
+                    </div>
+                    <div class="template-card" data-template="game">
+                        <h3>Simple Game</h3>
+                        <p>Basic game template with p5.play</p>
+                    </div>
+                    <div class="template-card" data-template="visualization">
+                        <h3>Data Visualization</h3>
+                        <p>Template for visualizing data</p>
+                    </div>
+                </div>
+                <button id="select-template" class="btn primary">Use Template</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
